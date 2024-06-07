@@ -193,21 +193,35 @@ impl Backtrace {
     }
 
     fn create(ip: usize) -> Backtrace {
+        eprintln!("debugalex 1");
         let mut frames = Vec::new();
+        eprintln!("debugalex 2");
+
         trace(|frame| {
+            eprintln!("debugalex 3");
+
             frames.push(BacktraceFrame {
                 frame: Frame::Raw(frame.clone()),
                 symbols: None,
             });
+
+            eprintln!("debugalex 5");
 
             // clear inner frames, and start with call site.
             if frame.symbol_address() as usize == ip {
                 frames.clear();
             }
 
+            eprintln!("debugalex 6");
+
             true
         });
+
+        eprintln!("debugalex 4");
+
         frames.shrink_to_fit();
+
+        eprintln!("debugalex 5");
 
         Backtrace { frames }
     }

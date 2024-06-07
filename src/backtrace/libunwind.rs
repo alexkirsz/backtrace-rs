@@ -113,20 +113,33 @@ impl Drop for Bomb {
 
 #[inline(always)]
 pub unsafe fn trace(mut cb: &mut dyn FnMut(&super::Frame) -> bool) {
+    eprintln!("debugalex trace 1");
+
     uw::_Unwind_Backtrace(trace_fn, addr_of_mut!(cb).cast());
+
+    eprintln!("debugalex trace 2");
 
     extern "C" fn trace_fn(
         ctx: *mut uw::_Unwind_Context,
         arg: *mut c_void,
     ) -> uw::_Unwind_Reason_Code {
+        eprintln!("debugalex trace 3");
+
         let cb = unsafe { &mut *arg.cast::<&mut dyn FnMut(&super::Frame) -> bool>() };
         let cx = super::Frame {
             inner: Frame::Raw(ctx),
         };
 
+        eprintln!("debugalex trace 4");
+
         let mut bomb = Bomb { enabled: true };
         let keep_going = cb(&cx);
+
+        eprintln!("debugalex trace 5");
+
         bomb.enabled = false;
+
+        eprintln!("debugalex trace 6");
 
         if keep_going {
             uw::_URC_NO_REASON

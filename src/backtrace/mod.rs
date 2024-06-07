@@ -49,8 +49,13 @@ use core::fmt;
 /// ```
 #[cfg(feature = "std")]
 pub fn trace<F: FnMut(&Frame) -> bool>(cb: F) {
+    eprintln!("debugalex 8");
+
     let _guard = crate::lock::lock();
+    eprintln!("debugalex 9");
+
     unsafe { trace_unsynchronized(cb) }
+    eprintln!("debugalex 10");
 }
 
 /// Same as `trace`, only unsafe as it's unsynchronized.
@@ -63,6 +68,8 @@ pub fn trace<F: FnMut(&Frame) -> bool>(cb: F) {
 ///
 /// See information on `trace` for caveats on `cb` panicking.
 pub unsafe fn trace_unsynchronized<F: FnMut(&Frame) -> bool>(mut cb: F) {
+    eprintln!("debugalex 11");
+
     trace_imp(&mut cb)
 }
 
